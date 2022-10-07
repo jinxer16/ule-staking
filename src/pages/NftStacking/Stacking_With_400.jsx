@@ -55,56 +55,6 @@ export default function Stacking_With_400() {
     }, 1000);
   }, []);
 
-  // const metamask = async () => {
-  //   let isConnected = false;
-  //   try {
-  //     if (window.ethereum) {
-  //       window.web3 = new Web3(window.ethereum);
-  //       await window.ethereum.enable();
-  //       isConnected = true;
-  //     } else if (window.web3) {
-  //       window.web3 = new Web3(window.web3.currentProvider);
-  //       isConnected = true;
-  //     } else {
-  //       isConnected = false;
-  //     }
-  //     if (isConnected === true) {
-  //       const web3 = window.web3;
-  //       let acc = await loadWeb3()
-  //       let accounts = await web3.eth.getAccounts();
-  //       console.log("Account", accounts[0]);
-  //       mainAccount = accounts[0];
-  //       //   $('#metamaskconnection').val("Wallet is connected");
-  //       jQuery("#metamaskconnection").text("connected");
-  //       setAccount(accounts[0]);
-  //       let chain = await web3.eth.getChainId();
-  //       console.log("ChainID", chain);
-  //       setChainId(chain);
-
-  //       let contractOf = new web3.eth.Contract(abitoken, contractAddresstoken);
-  //       let data = await contractOf.methods.balanceOf(acc).call();
-  //       console.log("Balance ",data);
-  //       let token = data / 1000000000000000000;
-  //       setBlnce(token);
-  //       console.log(token);
-
-  //       window.ethereum.on("accountsChanged", async function (accounts) {
-  //         setAccount(accounts[0]);
-  //         let chain = await web3.eth.getChainId();
-  //         setChainId(chain);
-  //         const web3 = window.web3;
-  //         let contract = new web3.eth.Contract(abitoken, contractAddresstoken);
-  //         let data = await contract.methods.balanceOf(accounts[0]).call();
-  //         let token = data / 1000000000000000000;
-  //         setBlnce(token);
-  //         console.log(blnce);
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log("error message", error?.message);
-  //   }
-  // };
-
   const getBalance = async () => {
     let acc = await loadWeb3();
     try {
@@ -116,25 +66,17 @@ export default function Stacking_With_400() {
       // let ResultRes = res.toString();
       // console.log("ResultRes ",ResultRes);
       setBlnce(res);
-      // console.log(type(res))
-      // setBalnacBNB(res?.data.data[0].usdperunit);
-      //   let data = await nftContractOf.methods.balanceOf(acc).call();
-
-      // console.log("Balance ",data);
     } catch (e) {
       console.log("Erroe while Call function Of GetBAlance", e);
     }
   };
-  // console.log("what is api",API)
   const WalletAddress = async () => {
     let ress = JSON.parse(user);
     let uId = ress?.user_id;
-
     try {
       const res = await axios.get(
         `https://ulenftapis.ulenft.site/get_user_info?id=${uId}`
       );
-
       let User_Address = res?.data?.data[0].EthAddress;
       if (res?.data?.data?.length > 0) {
         setUserInfo(res?.data?.data[0]);
@@ -149,109 +91,11 @@ export default function Stacking_With_400() {
     WalletAddress();
   }, []);
 
-  // async function handleActivation() {
-  //   try {
-  //     setLoadingTrans(true);
-
-  //     let usdamt = amount; //Package USD Amount
-  //     let token = blnce; //Package ULE Value
-  //     let mainadd = account;
-
-  //     if (parseInt(blnce) < parseInt(parseInt(amount) / rate)) {
-  //       alert("Wallet balance insufficient!!!");
-  //       setLoadingTrans(false);
-
-  //       return;
-  //     }
-
-  //     if (mainadd == undefined) {
-  //       alert("Please connect wallet!!!");
-  //       setLoadingTrans(false);
-  //       return;
-  //     }
-
-  //     if (parseInt(usdamt) < 100) {
-  //       alert("Enter Minimum package amount 100 USD!!!");
-  //       setLoadingTrans(false);
-  //       return;
-  //     }
-  //     if (parseInt(usdamt) < 100) {
-  //       alert("Enter Minimum package amount 100 USD!!!");
-  //       setLoadingTrans(false);
-  //       return;
-  //     }
-
-  //     if (parseInt(parseInt(usdamt) % 100) != 0) {
-  //       alert("Enter package amount in multiple of 100 USD!!!");
-  //       setLoadingTrans(false);
-  //       return;
-  //     }
-
-  //     if (parseInt(usdamt) > 10000) {
-  //       alert("Maximum package amount is 10000 USD");
-  //       setLoadingTrans(false);
-  //       return false;
-  //     }
-
-  //     const web3 = window.web3;
-
-  //     // let tokenAmount = web3.utils.toWei(value.toString());
-  //     // console.log("tokenAmount", tokenAmount);
-  //     let contract = new web3.eth.Contract(abi, contractAddress);
-  //     let tokencontract = new web3.eth.Contract(abitoken, contractAddresstoken);
-  //     await tokencontract.methods
-  //       // .approve(contractAddress, tokenAmount.toString())
-  //       .send({ from: account });
-
-  //     contract.methods
-  //       // .sell(tokenAmount.toString())
-  //       .send({
-  //         from: account,
-  //       })
-  //       .on("transactionHash", async (hash) => {
-  //         if (hash != "") {
-  //           try {
-  //             const res = await API.post(`/activation`, {
-  //               // uid: uid,
-  //               // transaction: hash,
-  //               amount: amount,
-  //               addreslist: account,
-  //               useraddress: account,
-  //               // amountlist: value,
-  //               // tokenamount: amount / rate,
-  //             });
-
-  //             console.log(res);
-  //             if (res?.data?.success) {
-  //               toast.success("Successfully subscribed to Activation ! ");
-  //               setLoadingTrans(false);
-  //             } else {
-  //               setLoadingTrans(false);
-
-  //               toast.error("Something went wrong ! ");
-  //             }
-  //             setTimeout(() => {
-  //               // getLiveRate1();
-  //             }, 250);
-  //           } catch (e) {
-  //             console.log("error", e);
-  //             setLoadingTrans(false);
-  //             toast.error("Something went wrong ! ");
-  //           }
-  //         }
-  //       });
-  //   } catch (error) {
-  //     console.log("error", error);
-  //     setLoadingTrans(false);
-  //   }
-  // }
-
   const ULE_Stake = async () => {
     const acc = await loadWeb3();
     const user = localStorage.getItem("user");
     let ress = JSON.parse(user);
     let uId_user = ress?.user_id;
-
     try {
       setLoadingTrans(true);
 
@@ -280,9 +124,7 @@ export default function Stacking_With_400() {
               amount: "400",
             }
           );
-
           Api_Conditon = Api_Conditon.data.data;
-
           if (check_Nft_Balance == acc) {
             if (Api_Conditon == "Success") {
               await Ule_100_ContractOf.methods

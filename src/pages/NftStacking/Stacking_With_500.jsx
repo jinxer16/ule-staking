@@ -32,11 +32,8 @@ export default function Stacking_With_500() {
   const user = localStorage.getItem("user");
   const dashboard = useSelector((state) => state?.dashboard);
 
-  // console.log("dashboard",dashboard);
-
   const getAccount = async () => {
     let acc = await loadWeb3();
-    // console.log("ACC=",acc)
     if (acc == "No Wallet") {
       setBtTxt("No Wallet");
     } else if (acc == "Wrong Network") {
@@ -700,7 +697,7 @@ export default function Stacking_With_500() {
                 <div className="col-6 d-flex justify-content-start">
                   <button
                     className="btn btn-stak"
-                    onClick={() => ULE_UnStake()}
+                    // onClick={() => ULE_UnStake()}
                     type="button"
                   >
                     <img

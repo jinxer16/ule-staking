@@ -55,56 +55,6 @@ export default function Stacking_With_3000() {
     }, 1000);
   }, []);
 
-  // const metamask = async () => {
-  //   let isConnected = false;
-  //   try {
-  //     if (window.ethereum) {
-  //       window.web3 = new Web3(window.ethereum);
-  //       await window.ethereum.enable();
-  //       isConnected = true;
-  //     } else if (window.web3) {
-  //       window.web3 = new Web3(window.web3.currentProvider);
-  //       isConnected = true;
-  //     } else {
-  //       isConnected = false;
-  //     }
-  //     if (isConnected === true) {
-  //       const web3 = window.web3;
-  //       let acc = await loadWeb3()
-  //       let accounts = await web3.eth.getAccounts();
-  //       console.log("Account", accounts[0]);
-  //       mainAccount = accounts[0];
-  //       //   $('#metamaskconnection').val("Wallet is connected");
-  //       jQuery("#metamaskconnection").text("connected");
-  //       setAccount(accounts[0]);
-  //       let chain = await web3.eth.getChainId();
-  //       console.log("ChainID", chain);
-  //       setChainId(chain);
-
-  //       let contractOf = new web3.eth.Contract(abitoken, contractAddresstoken);
-  //       let data = await contractOf.methods.balanceOf(acc).call();
-  //       console.log("Balance ",data);
-  //       let token = data / 1000000000000000000;
-  //       setBlnce(token);
-  //       console.log(token);
-
-  //       window.ethereum.on("accountsChanged", async function (accounts) {
-  //         setAccount(accounts[0]);
-  //         let chain = await web3.eth.getChainId();
-  //         setChainId(chain);
-  //         const web3 = window.web3;
-  //         let contract = new web3.eth.Contract(abitoken, contractAddresstoken);
-  //         let data = await contract.methods.balanceOf(accounts[0]).call();
-  //         let token = data / 1000000000000000000;
-  //         setBlnce(token);
-  //         console.log(blnce);
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log("error message", error?.message);
-  //   }
-  // };
-
   const getBalance = async () => {
     let acc = await loadWeb3();
     try {
@@ -148,103 +98,6 @@ export default function Stacking_With_3000() {
     getBalance();
     WalletAddress();
   }, []);
-
-  // async function handleActivation() {
-  //   try {
-  //     setLoadingTrans(true);
-
-  //     let usdamt = amount; //Package USD Amount
-  //     let token = blnce; //Package ULE Value
-  //     let mainadd = account;
-
-  //     if (parseInt(blnce) < parseInt(parseInt(amount) / rate)) {
-  //       alert("Wallet balance insufficient!!!");
-  //       setLoadingTrans(false);
-
-  //       return;
-  //     }
-
-  //     if (mainadd == undefined) {
-  //       alert("Please connect wallet!!!");
-  //       setLoadingTrans(false);
-  //       return;
-  //     }
-
-  //     if (parseInt(usdamt) < 100) {
-  //       alert("Enter Minimum package amount 100 USD!!!");
-  //       setLoadingTrans(false);
-  //       return;
-  //     }
-  //     if (parseInt(usdamt) < 100) {
-  //       alert("Enter Minimum package amount 100 USD!!!");
-  //       setLoadingTrans(false);
-  //       return;
-  //     }
-
-  //     if (parseInt(parseInt(usdamt) % 100) != 0) {
-  //       alert("Enter package amount in multiple of 100 USD!!!");
-  //       setLoadingTrans(false);
-  //       return;
-  //     }
-
-  //     if (parseInt(usdamt) > 10000) {
-  //       alert("Maximum package amount is 10000 USD");
-  //       setLoadingTrans(false);
-  //       return false;
-  //     }
-
-  //     const web3 = window.web3;
-
-  //     // let tokenAmount = web3.utils.toWei(value.toString());
-  //     // console.log("tokenAmount", tokenAmount);
-  //     let contract = new web3.eth.Contract(abi, contractAddress);
-  //     let tokencontract = new web3.eth.Contract(abitoken, contractAddresstoken);
-  //     await tokencontract.methods
-  //       // .approve(contractAddress, tokenAmount.toString())
-  //       .send({ from: account });
-
-  //     contract.methods
-  //       // .sell(tokenAmount.toString())
-  //       .send({
-  //         from: account,
-  //       })
-  //       .on("transactionHash", async (hash) => {
-  //         if (hash != "") {
-  //           try {
-  //             const res = await API.post(`/activation`, {
-  //               // uid: uid,
-  //               // transaction: hash,
-  //               amount: amount,
-  //               addreslist: account,
-  //               useraddress: account,
-  //               // amountlist: value,
-  //               // tokenamount: amount / rate,
-  //             });
-
-  //             console.log(res);
-  //             if (res?.data?.success) {
-  //               toast.success("Successfully subscribed to Activation ! ");
-  //               setLoadingTrans(false);
-  //             } else {
-  //               setLoadingTrans(false);
-
-  //               toast.error("Something went wrong ! ");
-  //             }
-  //             setTimeout(() => {
-  //               // getLiveRate1();
-  //             }, 250);
-  //           } catch (e) {
-  //             console.log("error", e);
-  //             setLoadingTrans(false);
-  //             toast.error("Something went wrong ! ");
-  //           }
-  //         }
-  //       });
-  //   } catch (error) {
-  //     console.log("error", error);
-  //     setLoadingTrans(false);
-  //   }
-  // }
 
   const ULE_Stake = async () => {
     const acc = await loadWeb3();
@@ -294,7 +147,7 @@ export default function Stacking_With_3000() {
               toast.success("Successfully Approved");
 
               let hash = await ULE_Staking_ContractOf.methods
-                .Stake(tokenid)
+                .Stake([tokenid], ULE_NFT_3000)
                 .send({
                   from: acc,
                   // value: totalMintingPriceBNB.toString()
@@ -337,7 +190,68 @@ export default function Stacking_With_3000() {
       setLoadingTrans(false);
     }
   };
+  const ULE_UnStake = async () => {
+    const acc = await loadWeb3();
+    const user = localStorage.getItem("user");
+    let ress = JSON.parse(user);
+    let uId_user = ress?.user_id;
 
+    try {
+      setLoadingTrans(true);
+
+      if (userInfo.EthAddress.toLowerCase() == acc.toLowerCase()) {
+        if (tokenid == "") {
+          toast.info("Please Enter Token Id");
+          setLoadingTrans(false);
+        } else {
+          const web3 = await window.web3;
+
+          let ULE_Staking_ContractOf = new web3.eth.Contract(
+            Ule_NFT_Staking_100_ABI,
+            ULE_NFT_Staking_100
+          );
+          let check_Nft_Balance = await ULE_Staking_ContractOf.methods
+            .userStakedNFT(acc, ULE_NFT_3000)
+            .call();
+
+          const LockedConditon = await ULE_Staking_ContractOf.methods
+            .locked()
+            .call();
+
+          let res = check_Nft_Balance.find((item) => {
+            return item == tokenid;
+          });
+          if (res == tokenid) {
+            if (LockedConditon == true) {
+              let hash = await ULE_Staking_ContractOf.methods
+                .unStake([tokenid], ULE_NFT_3000)
+                .send({
+                  from: acc,
+                });
+
+              toast.success("Transaction Confirmed");
+              // toast.info("Transaction Confirmed")
+              window.location.reload();
+            } else {
+              toast.info("Staking is locked !");
+              setLoadingTrans(false);
+            }
+          } else {
+            toast.info("You are not owner of this ID. ");
+            setLoadingTrans(false);
+          }
+        }
+      } else {
+        // toast.info("Account Mismatch")
+        toast.error("Account Mismatch");
+        setLoadingTrans(false);
+      }
+    } catch (error) {
+      console.log("Error While Call Un Staking Fuction", error);
+      toast.error("Transaction Failed");
+      setLoadingTrans(false);
+    }
+  };
   const getLiveRate = async () => {
     try {
       const res = await API.get(`/live_rate`);
@@ -363,7 +277,6 @@ export default function Stacking_With_3000() {
       },
       body: JSON.stringify(data),
     }).then((result) => {
-      // console.warn("result",result);
       result.json().then((resp) => {
         console.warn("resp", resp);
       });
@@ -374,79 +287,13 @@ export default function Stacking_With_3000() {
       <div class="col-md 9 stak">
         <div className="col-md-7 stack-md">
           <h4 className="stack-h4">NFT Staking 3000 </h4>
-          {/* <h6 className="stack-h6">
-            Available BNB Balance :
-            <input
-              type="text"
-              className="input_width"
-              id="txtchangevalue"
-              style={{ color: "black" }}
-              placeholder={`${setBalnacBNB}`}
-              readonly=""
-            />
-          </h6> */}
-
-          {/* <h6 className="stack-h6">
-            Available BNB Balance :
-            <span
-              id="tokenbalance"
-              style={{
-                paddingTop: "7px",
-                paddingBottom: "7px",
-                marginLeft: "0.5rem"
-              }}
-            >
-              {blnce}  BNB
-            </span>
-          </h6> */}
-          {/* <Activate /> */}
-          {/* <h6 className="stack-h6">
-            Live Rate :
-            <input
-              type="text"
-              className="input_width btn btn-stack"
-              id="txtchangevalue"
-              style={{ color: "black" }}
-              placeholder={`1 ULE /  ${rate} USD`}
-              readonly=""
-            />
-          
-          </h6> */}
 
           <hr className="stak-hr" />
-          {/* <isLocked /> */}
           <h6 className="stack-h6 text-center mt-5">
-            {/* Available BNB Balance : */}
             <span id="tokenbalance">{connectText}</span>
-            {/* <span>{btnTxt}</span> */}
           </h6>
           <form name="frm1" method="post">
             <h6 className="stack-h6 ipp">
-              {/* <input
-                type="text"
-                className="stak-input"
-                name="User Id"
-                value={uid}
-                onChange={(e) => {
-                  setUId(e.target.value);
-                }}
-                placeholder="Enter User id"
-                style={{ display: "none" }}
-                required
-              />
-              <input
-                type="text"
-                className="stak-input"
-                name="Address"
-                value={address}
-                onChange={(e) => {
-                  setAddress(e.target.value);
-                }}
-                placeholder="Enter Address"
-                style={{ display: "none" }}
-                required
-              /> */}
-
               <div class="dropdown ms-2 mt-2 mb-4">
                 <button
                   class="btn btn-secondary dropdown-toggle select_main btn_dropdownhere"
@@ -463,122 +310,81 @@ export default function Stacking_With_3000() {
                 >
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="/Stacking_With_100" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 100 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_200" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 200 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_300" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 300 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_400" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 400 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_500" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 500 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_1000" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 1000 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_2000" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 2000 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_3000" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 3000 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_4000" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 4000 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_5000" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 5000 USD
                       </Link>
                     </a>
                   </li>
                   <li>
                     <a class="dropdown-item">
-                      {" "}
                       <Link to="Stacking_With_10000" className="text-d">
-                        {" "}
-                        {/* <img src="bsc3.png" alt="" /> */}
                         Staking With 10000 USD
                       </Link>
                     </a>
                   </li>
-                  {/* <li>
-                      <a class="dropdown-item">
-                        <Link to="/Main_polygon" className="text-d">
-                          {" "}
-                          <img src="polygon.png" alt="" /> Polygon
-                        </Link>
-                      </a>
-                    </li> */}
                 </ul>
               </div>
               <input
@@ -592,20 +398,6 @@ export default function Stacking_With_3000() {
                 placeholder="Enter Token id"
                 required
               />
-
-              {/* <input
-                type="text"
-                className="stak-input"
-                name="fname"
-                value={txn}
-                onChange={(e) => {
-                  setTxn(e.target.value);
-                }}
-                placeholder="Enter Txn id"
-                style={{ display: "none" }}
-                required
-              /> */}
-              {/* <span className="stak-span">Token ID</span> */}
             </h6>
             {isLoadingTrans ? (
               <>
@@ -622,14 +414,34 @@ export default function Stacking_With_3000() {
                 </button>
               </>
             ) : (
-              <button
-                className="btn btn-stak"
-                onClick={() => ULE_Stake()}
-                type="button"
-              >
-                <img className="stack-sr" src="assets/images/Icon/112.png" />
-                Staking
-              </button>
+              <div className="row">
+                <div className="col-6 d-flex justify-content-center">
+                  <button
+                    className="btn btn-stak"
+                    onClick={() => ULE_Stake()}
+                    type="button"
+                  >
+                    <img
+                      className="stack-sr"
+                      src="assets/images/Icon/112.png"
+                    />
+                    Staking
+                  </button>
+                </div>
+                <div className="col-6 d-flex justify-content-start">
+                  <button
+                    className="btn btn-stak"
+                    // onClick={() => ULE_UnStake()}
+                    type="button"
+                  >
+                    <img
+                      className="stack-sr"
+                      src="assets/images/Icon/112.png"
+                    />
+                    Unstake
+                  </button>
+                </div>
+              </div>
             )}
           </form>
         </div>
